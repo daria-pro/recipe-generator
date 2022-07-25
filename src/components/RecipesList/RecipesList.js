@@ -7,7 +7,8 @@ import {
 } from "../../features/recipes/recipesSlice";
 import { useEffect } from "react";
 import RecipeCard from "../RecipeCard/RecipeCard";
-import { Box, Container, Grid } from "@mui/material";
+import { CircularProgress, Grid } from "@mui/material";
+import { StyledRecipesList } from "./RecipesListStyle";
 
 const RecipesList = () => {
   const dispatch = useDispatch();
@@ -16,34 +17,34 @@ const RecipesList = () => {
   const recipesError = useSelector(getRecipesError);
 
   useEffect(() => {
-    if (recipesStatus === "idle") {
-      dispatch(fetchRecipes());
-    }
-  }, [recipesStatus, dispatch]);
+    dispatch(fetchRecipes());
+  }, []);
 
   let content;
   if (recipesStatus === "loading") {
-    content = <p>Loading...</p>;
+    content = <CircularProgress />;
   } else if (recipesStatus === "succeeded") {
-    content = recipes[0].meals.map((recipe) => (
-      <Grid
-        item
-        xs={4}
-        sm={4}
-        md={4}
-        lg={3}
-        justifySelf="center"
-        key={recipe.idMeal}
-      >
-        <RecipeCard recipe={recipe} />
-      </Grid>
-    ));
+    recipes[0].meals
+      ? (content = recipes[0].meals.map((recipe) => (
+          <Grid
+            item
+            xs={4}
+            sm={4}
+            md={4}
+            lg={3}
+            justifySelf="center"
+            key={recipe.idMeal}
+          >
+            <RecipeCard recipe={recipe} />
+          </Grid>
+        )))
+      : (content = "No recipes found.");
   } else if (recipesStatus === "failed") {
     content = <p>{recipesError}</p>;
   }
 
   return (
-    <Container>
+    <StyledRecipesList>
       <Grid
         container
         spacing={{ xs: 2, md: 3 }}
@@ -53,7 +54,7 @@ const RecipesList = () => {
       >
         {content}
       </Grid>
-    </Container>
+    </StyledRecipesList>
   );
 };
 

@@ -22,7 +22,7 @@ const RecipeCard = ({ recipe }) => {
           variant: "subtitle1",
           textOverflow: "ellipsis",
           overflow: "hidden",
-          width: "95%",
+          width: "85%",
           whiteSpace: "nowrap",
         }}
       />
