@@ -10,7 +10,7 @@ export const theme = createTheme({
     MuiCssBaseline: {
       styleOverrides: `
         h1 {
-          color: grey;
+          color: black;
         }
       `,
     },

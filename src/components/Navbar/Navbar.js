@@ -173,7 +173,7 @@ export default function Navbar() {
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
-              placeholder="Search…"
+              placeholder="Search by recipe name…"
               inputProps={{ "aria-label": "search" }}
               onChange={(e) => onSearch(e.target.value)}
               value={searchValue}

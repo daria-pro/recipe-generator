@@ -5,6 +5,7 @@ import AppBar from "@mui/material/AppBar";
 export const StyledNavbar = styled(AppBar)(({ theme }) => ({
   borderRadius: "10px",
   minHeight: "64px",
+  backgroundColor: theme.palette.primary.main,
 }));
 
 export const Search = styled("div")(({ theme }) => ({
