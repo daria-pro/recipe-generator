@@ -1,47 +1,31 @@
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import IconButton from "@mui/material/IconButton";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { Typography } from "@mui/material";
+import { StyledRecipeCard } from "./RecipeCardStyle";
+import { Link } from "react-router-dom";
 
 const RecipeCard = ({ recipe }) => {
+  const list = [...Array(20).keys()];
+  const ingredients = list.map((item, index) => ({
+    name: `strIngredient${index + 1}`,
+    measure: `strMeasure${index + 1}`,
+  }));
+
   return (
-    <Card sx={{ maxWidth: 345 }}>
-      <CardHeader
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
-        title={recipe.strMeal}
-        titleTypographyProps={{
-          variant: "subtitle1",
-          textOverflow: "ellipsis",
-          overflow: "hidden",
-          width: "85%",
-          whiteSpace: "nowrap",
-        }}
-      />
-      <CardMedia
-        component="img"
-        height="194"
-        image={recipe.strMealThumb}
-        alt="Paella dish"
-      />
-      <CardContent></CardContent>
-      <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton>
-      </CardActions>
-    </Card>
+    <StyledRecipeCard>
+      <Link to={`:${recipe.idMeal}`} className="card__link">
+        <Typography className="card__title">{recipe.strMeal}</Typography>
+        <img src={recipe.strMealThumb} alt={recipe.strMeal} />
+        <ul className="card__list">
+          {ingredients.map((item, index) =>
+            recipe[item.name] ? (
+              <li key={index} className="card__list-item">
+                <p>{recipe[item.name]}</p>
+                <p className="card__measure">{recipe[item.measure]}</p>
+              </li>
+            ) : null
+          )}
+        </ul>
+      </Link>
+    </StyledRecipeCard>
   );
 };
 

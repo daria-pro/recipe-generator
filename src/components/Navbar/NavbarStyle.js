@@ -6,6 +6,7 @@ export const StyledNavbar = styled(AppBar)(({ theme }) => ({
   borderRadius: "10px",
   minHeight: "64px",
   backgroundColor: theme.palette.primary.main,
+  display: "flex",
 }));
 
 export const Search = styled("div")(({ theme }) => ({

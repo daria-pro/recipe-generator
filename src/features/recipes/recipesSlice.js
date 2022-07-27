@@ -3,9 +3,12 @@ import api from "../../api/recipes";
 
 const initialState = {
   recipes: [],
-  categories: [],
   status: "idle",
   error: null,
+  recipePage: null,
+  recipeStatus: "idle",
+  recipeError: null,
+  categories: [],
 };
 
 export const fetchRecipes = createAsyncThunk(
@@ -56,6 +59,18 @@ export const searchByCategory = createAsyncThunk(
   }
 );
 
+export const fetchById = createAsyncThunk(
+  "recipes/fetchByid",
+  async (value) => {
+    try {
+      const response = await api.get(`/lookup.php?i=${value}`);
+      return response.data;
+    } catch (err) {
+      return err.message;
+    }
+  }
+);
+
 export const recipesSlice = createSlice({
   name: "recipes",
   initialState,
@@ -74,7 +89,7 @@ export const recipesSlice = createSlice({
         state.status = "failed";
         state.error = action.error.message;
       })
-      //searchByName
+      //search by name
       .addCase(searchByName.pending, (state, action) => {
         state.status = "loading";
       })
@@ -87,7 +102,7 @@ export const recipesSlice = createSlice({
         state.status = "failed";
         state.error = action.error.message;
       })
-      //searchByCategory
+      //search by category
       .addCase(searchByCategory.pending, (state, action) => {
         state.status = "loading";
       })
@@ -100,9 +115,23 @@ export const recipesSlice = createSlice({
         state.status = "failed";
         state.error = action.error.message;
       })
+      //fetch categories
       .addCase(fetchCategories.fulfilled, (state, action) => {
         const loadedCategories = action.payload;
         state.categories = [].concat(loadedCategories);
+      })
+      //fetch by id
+      .addCase(fetchById.pending, (state, action) => {
+        state.recipeStatus = "loading";
+      })
+      .addCase(fetchById.fulfilled, (state, action) => {
+        state.recipeStatus = "succeeded";
+        const loadedRecipes = action.payload;
+        state.recipePage = loadedRecipes;
+      })
+      .addCase(fetchById.rejected, (state, action) => {
+        state.recipeStatus = "failed";
+        state.recipeError = action.error.message;
       });
   },
 });
@@ -111,5 +140,9 @@ export const selectAllRecipes = (state) => state.recipes.recipes;
 export const getRecipesStatus = (state) => state.recipes.status;
 export const getRecipesError = (state) => state.recipes.error;
 export const selectAllCategories = (state) => state.recipes.categories;
+
+export const selectOneRecipe = (state) => state.recipes.recipePage;
+export const getRecipeStatus = (state) => state.recipes.recipeStatus;
+export const getRecipeError = (state) => state.recipes.recipeError;
 
 export default recipesSlice.reducer;
